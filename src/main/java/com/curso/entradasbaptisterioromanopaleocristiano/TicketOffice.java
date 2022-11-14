@@ -20,31 +20,57 @@ public class TicketOffice {
         calendar = new HashMap();
     }
 
-    public void sellTickets(int numTickets, int money, String ticketDate) {
-
+    public boolean sellTickets(int numTickets, int money, String ticketDate)throws ArithmeticException, Sintickets {
+        boolean sellTickets =true;
         Integer selled = calendar.get(ticketDate);
-        if (selled == null) {
-            calendar.put(ticketDate, numTickets);
-        } else {
-            calendar.put(ticketDate, selled + numTickets);
-            calendar.get(ticketDate);
+        
+        if (canSellTickets(numTickets, money, ticketDate)) {
+            if (selled == null) {
+                calendar.put(ticketDate, numTickets);
+            } else {
+                calendar.put(ticketDate, selled + numTickets);
+                calendar.get(ticketDate);
+            }
+        }else{
+            sellTickets=false;
         }
+        
+        return sellTickets;
     }
 
-    public boolean canSellTickets(int numTickets, int money, String ticketDate) {
+    public boolean canSellTickets(int numTickets, int money, String ticketDate)throws ArithmeticException, Sintickets{
         boolean canSell = false;
-        if (money == numTickets * 4 && numTickets <= 10) {
+        
+        if (money != numTickets * 4){
+            throw new ArithmeticException("Ya se que te ha fascinado el baptisterio romano paleocristiano "
+                    + "del siglo primero de las Gabias, pero aprende a contar, cariño.");
+        }
+        
+        if (numTickets > 10){
+            throw new Sintickets ("Para ese dia ya estamos llenos cariño, pero es entendible, ¿A QUIEN NO LE VA A GUSTAR?" +
+                                "\nNos quedan solo " + getRemainingTickets(ticketDate)+ "entradas para el" + ticketDate +".");
+        }
+        
+        if(money == numTickets * 4 && numTickets <= 10) {
             if (calendar.containsKey(ticketDate)) {
-                if (calendar.get(ticketDate) + numTickets <= 10)
+                if (calendar.get(ticketDate) + numTickets <= 10) {
                     canSell = true;
-            } else
+                }
+            } else {
                 canSell = true;
+            }
         }
         return canSell;
     }
-    
-    public int getRemainingTickets(String date){
-        return 10 - calendar.get(date);
+
+    public int getRemainingTickets(String date) {
+        int tickets=0;
+        if(calendar.containsKey(date)){
+            tickets=10 - calendar.get(date);
+        }else{
+            tickets=10;
+        }
+        return tickets;
     }
 
     public boolean correctDate(String date) {
