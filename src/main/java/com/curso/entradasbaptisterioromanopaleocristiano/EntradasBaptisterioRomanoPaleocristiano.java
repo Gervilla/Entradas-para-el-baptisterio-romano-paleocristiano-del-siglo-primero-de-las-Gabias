@@ -4,7 +4,9 @@
  */
 package com.curso.entradasbaptisterioromanopaleocristiano;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
 
 /**
  *
@@ -37,24 +39,29 @@ public class EntradasBaptisterioRomanoPaleocristiano {
                 System.out.println("Cuando desea acudir al Baptisterio?");
                 date = sc.nextLine();
                 if (office.correctDate(date)) {
-                    System.out.println("Cuantas entradas desea para es dia?");
-                    int numTickets = sc.nextInt();
-                    sc.nextLine();
-                    if (office.canSellTickets(numTickets, numTickets * 4, date)) {
+                    try{
+                        System.out.println("Cuantas entradas desea para ese dia?");
+                        int numTickets = sc.nextInt();
+                        sc.nextLine();
+
                         System.out.println("Serian " + numTickets * 4 + "$.");
                         int money = sc.nextInt();
                         sc.nextLine();
 
-                        if (office.canSellTickets(numTickets, money, date)) {
+                        if(office.sellTickets(numTickets, money, date)){
                             System.out.println("Aqui tiene sus tickets.");
                             office.sellTickets(numTickets, money, date);
-                        } else
-                            System.out.println("Ya se que te ha fascinado el baptisterio romano paleocristiano del siglo primero de las Gabias, pero aprende a contar, cariño.");
-                    } else
-                        System.out.println("Para ese dia ya estamos llenos cariño, pero es entendible, ¿A QUIEN NO LE VA A GUSTAR?"
-                                + "\nNos quedan solo "+office.getRemainingTickets(date)+" entradas para el "+date+".");
-                } else
+                        }
+                    }catch(InputMismatchException e){
+                        System.out.println(e.getMessage());
+                    } catch (Sintickets ex) {
+                        System.out.println(ex.getMessage());
+                    }
+
+                }else{
                     System.out.println("No se de que planeta vienes, pero en este, eso no es una fecha, cariño.");
+                }
+                
             } else if (option.toLowerCase().equals("no"))
                 exit = true;
             else
