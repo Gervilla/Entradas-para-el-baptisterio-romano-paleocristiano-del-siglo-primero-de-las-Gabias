@@ -4,6 +4,7 @@
  */
 package com.curso.entradasbaptisterioromanopaleocristiano;
 
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class EntradasBaptisterioRomanoPaleocristiano {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String date, option;
+        String day, option;
         boolean exit = false;
         while (!exit) {
             String UI = """
@@ -37,8 +38,9 @@ public class EntradasBaptisterioRomanoPaleocristiano {
 
             if (option.toLowerCase().equals("si")) {
                 System.out.println("Cuando desea acudir al Baptisterio?");
-                date = sc.nextLine();
-                if (office.correctDate(date)) {
+                day = sc.nextLine();
+                Date date = office.correctDate(day);
+                if (date!= null && office.proxDate(date)) {
                     try{
                         System.out.println("Cuantas entradas desea para ese dia?");
                         int numTickets = sc.nextInt();
@@ -59,7 +61,7 @@ public class EntradasBaptisterioRomanoPaleocristiano {
                     }
 
                 }else{
-                    System.out.println("No se de que planeta vienes, pero en este, eso no es una fecha, cariño.");
+                    System.out.println("No se de que planeta vienes, pero en este, esa fecha no esta disponible, cariño.");
                 }
                 
             } else if (option.toLowerCase().equals("no"))
