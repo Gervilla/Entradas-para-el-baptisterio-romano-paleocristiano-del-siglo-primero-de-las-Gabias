@@ -48,7 +48,7 @@ public class TicketOffice {
         
         if (numTickets > 10){
             throw new Sintickets ("Para ese dia ya estamos llenos cariño, pero es entendible, ¿A QUIEN NO LE VA A GUSTAR?" +
-                                "\nNos quedan solo " + getRemainingTickets(ticketDate)+ "entradas para el" + ticketDate +".");
+                                "\nNos quedan solo " + getRemainingTickets(ticketDate)+ "entradas para el " + ticketDate +".");
         }
         
         if(money == numTickets * 4 && numTickets <= 10) {
