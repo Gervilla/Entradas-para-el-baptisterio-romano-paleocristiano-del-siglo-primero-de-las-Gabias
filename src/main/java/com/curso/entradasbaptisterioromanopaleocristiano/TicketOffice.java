@@ -4,9 +4,11 @@
  */
 package com.curso.entradasbaptisterioromanopaleocristiano;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -14,23 +16,19 @@ import java.util.regex.Pattern;
  */
 public class TicketOffice {
 
-    private HashMap<String, Integer> calendar;
+    private HashMap<Date, Integer> calendar;
 
     public TicketOffice() {
         calendar = new HashMap();
     }
 
-    public boolean sellTickets(int numTickets, int money, String ticketDate)throws ArithmeticException, Sintickets {
+    public boolean sellTickets(int numTickets, int money, Date ticketDate)throws ArithmeticException, Sintickets {
         boolean sellTickets =true;
-        Integer selled = calendar.get(ticketDate);
+        Integer selled = calendar.getOrDefault(ticketDate,0);
         
-        if (canSellTickets(numTickets, money, ticketDate)) {
-            if (selled == null) {
-                calendar.put(ticketDate, numTickets);
-            } else {
+        if (canSellTickets(numTickets, money, ticketDate)) {         
                 calendar.put(ticketDate, selled + numTickets);
-                calendar.get(ticketDate);
-            }
+                calendar.get(ticketDate);   
         }else{
             sellTickets=false;
         }
@@ -38,7 +36,7 @@ public class TicketOffice {
         return sellTickets;
     }
 
-    public boolean canSellTickets(int numTickets, int money, String ticketDate)throws ArithmeticException, Sintickets{
+    public boolean canSellTickets(int numTickets, int money, Date ticketDate)throws ArithmeticException, Sintickets{
         boolean canSell = false;
         
         if (money != numTickets * 4){
@@ -48,7 +46,7 @@ public class TicketOffice {
         
         if (numTickets > 10){
             throw new Sintickets ("Para ese dia ya estamos llenos cariño, pero es entendible, ¿A QUIEN NO LE VA A GUSTAR?" +
-                                "\nNos quedan solo " + getRemainingTickets(ticketDate)+ "entradas para el " + ticketDate +".");
+                                "\nNos quedan solo " + getRemainingTickets(ticketDate)+ " entradas para el " + ticketDate.toString() +".");
         }
         
         if(money == numTickets * 4 && numTickets <= 10) {
@@ -63,8 +61,8 @@ public class TicketOffice {
         return canSell;
     }
 
-    public int getRemainingTickets(String date) {
-        int tickets=0;
+    public int getRemainingTickets(Date date) {
+        int tickets;
         if(calendar.containsKey(date)){
             tickets=10 - calendar.get(date);
         }else{
@@ -72,11 +70,24 @@ public class TicketOffice {
         }
         return tickets;
     }
-
-    public boolean correctDate(String date) {
-        Pattern pattern = Pattern.compile("^([0-2][0-9]|(3)[0-1])(\\/)(((0)[0-9])|((1)[0-2]))(\\/)\\d{4}$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(date);
-        boolean correctDate = matcher.find();
-        return correctDate;
+    
+    public Date correctDate(String date) {
+        Date day;
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+            formatoFecha.setLenient(false);
+            day=formatoFecha.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+        return day;
+    }
+    
+    public boolean proxDate(Date date){
+        boolean proxDate=true;
+        if (!date.after(Calendar.getInstance().getTime())){
+                proxDate=false;
+        }
+        return proxDate;
     }
 }
